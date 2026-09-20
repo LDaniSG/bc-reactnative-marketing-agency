@@ -11,3 +11,12 @@ export interface Campaign {
   imageUri: string;
   subtitle: string;
 }
+
+export interface CreateCampaignPayload {
+  title: string;
+  clientName: string;
+  industry: string;
+  channel: 'Meta Ads' | 'Google Search' | 'LinkedIn Ads' | 'TikTok Ads' | 'Email Marketing';
+  budget: number;
+  subtitle: string;
+}
