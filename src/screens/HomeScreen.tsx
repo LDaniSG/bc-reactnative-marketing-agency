@@ -4,8 +4,9 @@ import { Campaign } from '../types';
 import { ItemCard } from '../components/ItemCard';
 import { MOCK_ITEMS } from '../data/mockData';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '../theme';
+import { CampaignsListScreenProps } from '../navigation/types';
 
-export function HomeScreen(): React.JSX.Element {
+export function HomeScreen({ navigation }: CampaignsListScreenProps): React.JSX.Element {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredCampaigns = useMemo(() => {
@@ -20,8 +21,8 @@ export function HomeScreen(): React.JSX.Element {
   }, [searchQuery]);
 
   const handleItemPress = useCallback((item: Campaign) => {
-    console.log('Selected Campaign:', item.title, 'for Client:', item.clientName);
-  }, []);
+    navigation.navigate('CampaignDetail', { id: item.id, title: item.title });
+  }, [navigation]);
 
   const renderItem = useCallback(({ item }: ListRenderItemInfo<Campaign>) => (
     <ItemCard item={item} onPress={handleItemPress} />
