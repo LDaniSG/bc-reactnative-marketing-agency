@@ -1,14 +1,9 @@
 # Semana 01 — Agencia de Marketing Digital (Apex Media Agency)
 
-> **Bootcamp React Native** | **Dominio**: Agencia de Marketing Digital (, , , )
+> **Bootcamp React Native (SENA)** | **Dominio**: Agencia de Marketing Digital (`clients`, `campaigns`, `metrics`, `channels`)
 
-## 📋 Requisitos Cumplidos
-- Código adaptado 100% al dominio asignado.
-- TypeScript estricto sin tipos `any`.
-- Componentes y estilos profesionales.
-
-## 🚀 Cómo Ejecutar
+## 🚀 Ejecución
 ```bash
 npm install
-npx expo start
+npx expo start --web
 ```
