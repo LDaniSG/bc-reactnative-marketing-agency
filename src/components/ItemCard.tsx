@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
 import { Campaign } from '../types';
+import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '../theme';
 
 interface ItemCardProps {
   item: Campaign;
@@ -10,7 +11,15 @@ interface ItemCardProps {
 export function ItemCard({ item, onPress }: ItemCardProps): React.JSX.Element {
   const isCompleted = item.status === 'completed';
   const isPaused = item.status === 'paused';
-  const statusColor = isCompleted ? '#38bdf8' : isPaused ? '#f59e0b' : '#22c55e';
+  const isDraft = item.status === 'draft';
+
+  const statusColor = isCompleted
+    ? COLORS.accent
+    : isPaused
+    ? COLORS.warning
+    : isDraft
+    ? COLORS.textMuted
+    : COLORS.success;
 
   return (
     <Pressable style={({ pressed }) => [styles.card, pressed && styles.cardPressed]} onPress={() => onPress(item)}>
@@ -48,21 +57,21 @@ export function ItemCard({ item, onPress }: ItemCardProps): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: '#1e293b', borderRadius: 16, marginBottom: 16, overflow: 'hidden', borderWidth: 1, borderColor: '#334155' },
+  card: { backgroundColor: COLORS.card, borderRadius: RADIUS.lg, marginBottom: SPACING.lg, overflow: 'hidden', borderWidth: 1, borderColor: COLORS.cardBorder },
   cardPressed: { opacity: 0.9, transform: [{ scale: 0.99 }] },
   cardImage: { width: '100%', height: 160 },
-  cardBody: { padding: 16, gap: 8 },
+  cardBody: { padding: SPACING.lg, gap: SPACING.xs + 2 },
   badgeRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20, borderWidth: 1 },
+  badge: { paddingHorizontal: SPACING.sm + 2, paddingVertical: SPACING.xs, borderRadius: RADIUS.full, borderWidth: 1 },
   badgeText: { fontSize: 11, fontWeight: '700', letterSpacing: 0.5 },
-  channelText: { fontSize: 12, color: '#94a3b8', fontWeight: '600' },
-  cardTitle: { fontSize: 20, fontWeight: '700', color: '#f8fafc' },
-  clientName: { fontSize: 13, color: '#6366f1', fontWeight: '600' },
-  cardSubtitle: { fontSize: 14, color: '#cbd5e1', lineHeight: 20 },
-  cardFooter: { flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#0f172a', borderRadius: 12, padding: 12, marginTop: 8, borderWidth: 1, borderColor: '#1e293b' },
+  channelText: { fontSize: 12, color: COLORS.textMuted, fontWeight: '600' },
+  cardTitle: { fontSize: 20, fontWeight: '700', color: COLORS.textPrimary },
+  clientName: { fontSize: 13, color: COLORS.primary, fontWeight: '600' },
+  cardSubtitle: { ...TYPOGRAPHY.body, lineHeight: 20 },
+  cardFooter: { flexDirection: 'row', justifyContent: 'space-between', backgroundColor: COLORS.background, borderRadius: RADIUS.md, padding: SPACING.md, marginTop: SPACING.xs, borderWidth: 1, borderColor: COLORS.border },
   statColumn: { alignItems: 'flex-start' },
-  statLabel: { fontSize: 10, color: '#64748b', fontWeight: '700', letterSpacing: 0.5 },
-  statValue: { fontSize: 13, color: '#f1f5f9', fontWeight: '700', marginTop: 2 },
-  actionButton: { backgroundColor: '#6366f1', borderRadius: 10, paddingVertical: 10, alignItems: 'center', marginTop: 6 },
+  statLabel: { fontSize: 10, color: COLORS.textMuted, fontWeight: '700', letterSpacing: 0.5 },
+  statValue: { fontSize: 13, color: COLORS.textPrimary, fontWeight: '700', marginTop: 2 },
+  actionButton: { backgroundColor: COLORS.primary, borderRadius: RADIUS.sm, paddingVertical: SPACING.md - 2, alignItems: 'center', marginTop: SPACING.xs },
   actionButtonText: { color: '#ffffff', fontSize: 14, fontWeight: '700' },
 });
