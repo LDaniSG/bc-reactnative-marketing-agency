@@ -1,1 +1,1 @@
-# Week 03 — React Navigation 7 Integration
+# Week 04 — Global State Management with Zustand
