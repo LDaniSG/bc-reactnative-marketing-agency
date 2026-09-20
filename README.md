@@ -1,1 +1,1 @@
-# Week 02 — Searchable Campaign List & Theming
+# Week 03 — React Navigation 7 Integration
