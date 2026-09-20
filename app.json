@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Apex Marketing Agency",
+    "slug": "bc-reactnative-marketing-agency",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#0f172a"
+    }
+  }
+}
