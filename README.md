@@ -1,6 +1,15 @@
-# Semana 03 — Agencia de Marketing Digital (Apex Media Agency)
+# Semana 03 — React Navigation 7
 
-> **Bootcamp React Native (SENA)** | **Dominio**: Agencia de Marketing Digital (`clients`, `campaigns`, `metrics`, `channels`)
+> **Bootcamp React Native (SENA)** | **Dominio Asignado**: Agencia de Marketing Digital (`Apex Media Agency`)
+
+---
+
+## 📋 Requisitos Cumplidos (Semana 03)
+- **Tab & Stack Navigator**: React Navigation 7.
+- **Rutas Tipadas**: Parámetros tipados en `src/navigation/types.ts`.
+- **Ionicons**: Iconos nativos en pestañas.
+
+---
 
 ## 🚀 Ejecución
 ```bash
