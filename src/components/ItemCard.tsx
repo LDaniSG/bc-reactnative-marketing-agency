@@ -65,9 +65,9 @@ export function ItemCard({ item, onPress }: ItemCardProps): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: COLORS.card, borderRadius: RADIUS.lg, marginBottom: SPACING.lg, overflow: 'hidden', borderWidth: 1, borderColor: COLORS.cardBorder, shadowColor: '#172b3a', shadowOpacity: 0.06, shadowRadius: 12, shadowOffset: { width: 0, height: 5 }, elevation: 2 },
+  card: { backgroundColor: COLORS.card, borderRadius: RADIUS.lg, marginBottom: SPACING.lg, overflow: 'hidden', borderWidth: 1, borderColor: COLORS.cardBorder, shadowColor: '#172b3a', shadowOpacity: 0.08, shadowRadius: 14, shadowOffset: { width: 0, height: 6 }, elevation: 3 },
   cardPressed: { opacity: 0.94, transform: [{ scale: 0.99 }] },
-  imageWrap: { height: 154, position: 'relative' },
+  imageWrap: { height: 170, position: 'relative' },
   cardImage: { width: '100%', height: '100%' },
   imageOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: '#172b3a28' },
   imageLabel: { position: 'absolute', left: SPACING.md, bottom: SPACING.md, flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: '#172b3acc', paddingHorizontal: SPACING.sm, paddingVertical: 5, borderRadius: RADIUS.sm },

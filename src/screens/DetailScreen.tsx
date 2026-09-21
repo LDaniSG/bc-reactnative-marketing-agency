@@ -1,15 +1,19 @@
 import React from 'react';
 import { View, Text, ScrollView, Image, StyleSheet, SafeAreaView, StatusBar, Pressable } from 'react-native';
 import type { ImageStyle } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { CampaignDetailScreenProps } from '../navigation/types';
 import { MOCK_ITEMS } from '../data/mockData';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '../theme';
+import { useSavedCampaignsStore } from '../stores/savedStore';
 
 export function DetailScreen({ route, navigation }: CampaignDetailScreenProps): React.JSX.Element {
   const { id } = route.params;
   const campaign = MOCK_ITEMS.find((item) => item.id === id) || MOCK_ITEMS[0];
   const spentPercentage = Math.round((campaign.spent / campaign.budget) * 100);
   const statusLabel = { active: 'ACTIVA', paused: 'PAUSADA', completed: 'COMPLETADA', draft: 'BORRADOR' }[campaign.status];
+  const isSaved = useSavedCampaignsStore((state) => state.isSaved(campaign.id));
+  const toggleSaveCampaign = useSavedCampaignsStore((state) => state.toggleSaveCampaign);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -25,6 +29,10 @@ export function DetailScreen({ route, navigation }: CampaignDetailScreenProps): 
           </View>
           <Text style={styles.title}>{campaign.title}</Text>
           <Text style={styles.client}>{campaign.clientName}  /  {campaign.industry}</Text>
+          <Pressable style={[styles.saveButton, isSaved && styles.saveButtonActive]} onPress={() => toggleSaveCampaign(campaign)}>
+            <Ionicons name={isSaved ? 'bookmark' : 'bookmark-outline'} size={17} color={isSaved ? '#ffffff' : COLORS.primaryDark} />
+            <Text style={[styles.saveButtonText, isSaved && styles.saveButtonTextActive]}>{isSaved ? 'Campaña guardada' : 'Guardar campaña'}</Text>
+          </Pressable>
         </View>
 
         <View style={styles.section}>
@@ -85,6 +93,10 @@ const styles = StyleSheet.create({
   badgeText: { fontSize: 11, color: COLORS.success, fontWeight: '800' },
   title: { ...TYPOGRAPHY.title, fontSize: 26, lineHeight: 32 },
   client: { fontSize: 14, color: COLORS.primaryDark, fontWeight: '700' },
+  saveButton: { alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, backgroundColor: COLORS.activeBadge, borderWidth: 1, borderColor: COLORS.accent, paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm, borderRadius: RADIUS.full, marginTop: SPACING.sm },
+  saveButtonActive: { backgroundColor: COLORS.accent, borderColor: COLORS.accent },
+  saveButtonText: { color: COLORS.primaryDark, fontSize: 12, fontWeight: '800' },
+  saveButtonTextActive: { color: '#ffffff' },
   section: { backgroundColor: COLORS.card, padding: SPACING.lg, borderRadius: RADIUS.md, borderWidth: 1, borderColor: COLORS.border, gap: SPACING.sm, shadowColor: '#172b3a', shadowOpacity: 0.04, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 1 },
   sectionTitle: { fontSize: 16, fontWeight: '800', color: COLORS.textPrimary },
   description: { ...TYPOGRAPHY.body, lineHeight: 22 },

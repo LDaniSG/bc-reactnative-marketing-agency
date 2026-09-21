@@ -7,6 +7,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { HomeScreen } from '../screens/HomeScreen';
 import { DetailScreen } from '../screens/DetailScreen';
 import { ChannelsScreen } from '../screens/ChannelsScreen';
+import { CreateScreen } from '../screens/CreateScreen';
+import { SavedScreen } from '../screens/SavedScreen';
+import { useSavedCampaignsStore } from '../stores/savedStore';
 import { COLORS } from '../theme';
 import type { HomeStackParamList, RootTabParamList } from './types';
 
@@ -25,11 +28,14 @@ function HomeStackNavigator(): React.JSX.Element {
     >
       <Stack.Screen name="CampaignsList" component={HomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="CampaignDetail" component={DetailScreen} options={({ route }) => ({ title: route.params.title })} />
+      <Stack.Screen name="CreateCampaign" component={CreateScreen} options={{ presentation: 'modal', title: 'Nueva campaña' }} />
     </Stack.Navigator>
   );
 }
 
 export function RootNavigator(): React.JSX.Element {
+  const savedCount = useSavedCampaignsStore((state) => state.savedCampaigns.length);
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -41,12 +47,14 @@ export function RootNavigator(): React.JSX.Element {
           tabBarIcon: ({ color, size }) => {
             let iconName: keyof typeof Ionicons.glyphMap = 'cube-outline';
             if (route.name === 'CampaignsTab') iconName = 'megaphone-outline';
+            else if (route.name === 'SavedTab') iconName = 'bookmark-outline';
             else if (route.name === 'ChannelsTab') iconName = 'stats-chart-outline';
             return <Ionicons name={iconName} size={size} color={color} />;
           },
         })}
       >
         <Tab.Screen name="CampaignsTab" component={HomeStackNavigator} options={{ tabBarLabel: 'Campañas' }} />
+        <Tab.Screen name="SavedTab" component={SavedScreen} options={{ tabBarLabel: 'Guardadas', tabBarBadge: savedCount || undefined }} />
         <Tab.Screen name="ChannelsTab" component={ChannelsScreen} options={{ tabBarLabel: 'Canales' }} />
       </Tab.Navigator>
     </NavigationContainer>

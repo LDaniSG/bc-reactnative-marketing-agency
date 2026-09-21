@@ -5,10 +5,12 @@ import type { CompositeScreenProps, NavigatorScreenParams } from '@react-navigat
 export type HomeStackParamList = {
   CampaignsList: undefined;
   CampaignDetail: { id: string; title: string };
+  CreateCampaign: undefined;
 };
 
 export type RootTabParamList = {
   CampaignsTab: NavigatorScreenParams<HomeStackParamList>;
+  SavedTab: undefined;
   ChannelsTab: undefined;
 };
 
@@ -24,5 +26,5 @@ export type CampaignDetailScreenProps = CompositeScreenProps<
 
 export type ChannelsScreenProps = BottomTabScreenProps<RootTabParamList, 'ChannelsTab'>;
 
-export type SavedScreenProps = BottomTabScreenProps<RootTabParamList, 'CampaignsTab'>;
-export type CreateCampaignScreenProps = BottomTabScreenProps<RootTabParamList, 'CampaignsTab'>;
+export type SavedScreenProps = BottomTabScreenProps<RootTabParamList, 'SavedTab'>;
+export type CreateCampaignScreenProps = NativeStackScreenProps<HomeStackParamList, 'CreateCampaign'>;

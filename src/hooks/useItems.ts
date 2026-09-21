@@ -11,12 +11,8 @@ export function useCampaigns() {
   return useQuery<Campaign[]>({
     queryKey: CAMPAIGNS_QUERY_KEY,
     queryFn: async () => {
-      try {
-        await apiClient.get('/posts?_limit=10');
-        return localCampaigns;
-      } catch (error) {
-        return localCampaigns;
-      }
+      await apiClient.get('/posts?_limit=10');
+      return localCampaigns;
     },
   });
 }
