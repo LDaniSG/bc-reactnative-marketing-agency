@@ -35,8 +35,8 @@ export function RootNavigator(): React.JSX.Element {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
-          tabBarStyle: { backgroundColor: COLORS.surface, borderTopColor: COLORS.border, elevation: 0 },
-          tabBarActiveTintColor: COLORS.primary,
+          tabBarStyle: { backgroundColor: COLORS.surface, borderTopColor: COLORS.border, height: 68, paddingBottom: 8, paddingTop: 8, elevation: 0 },
+          tabBarActiveTintColor: COLORS.primaryDark,
           tabBarInactiveTintColor: COLORS.textMuted,
           tabBarIcon: ({ color, size }) => {
             let iconName: keyof typeof Ionicons.glyphMap = 'cube-outline';
@@ -46,8 +46,8 @@ export function RootNavigator(): React.JSX.Element {
           },
         })}
       >
-        <Tab.Screen name="CampaignsTab" component={HomeStackNavigator} options={{ tabBarLabel: 'Campaigns' }} />
-        <Tab.Screen name="ChannelsTab" component={ChannelsScreen} options={{ tabBarLabel: 'Channels' }} />
+        <Tab.Screen name="CampaignsTab" component={HomeStackNavigator} options={{ tabBarLabel: 'Campañas' }} />
+        <Tab.Screen name="ChannelsTab" component={ChannelsScreen} options={{ tabBarLabel: 'Canales' }} />
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -23,3 +23,6 @@ export type CampaignDetailScreenProps = CompositeScreenProps<
 >;
 
 export type ChannelsScreenProps = BottomTabScreenProps<RootTabParamList, 'ChannelsTab'>;
+
+export type SavedScreenProps = BottomTabScreenProps<RootTabParamList, 'CampaignsTab'>;
+export type CreateCampaignScreenProps = BottomTabScreenProps<RootTabParamList, 'CampaignsTab'>;

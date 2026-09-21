@@ -32,15 +32,15 @@ export function useCampaignById(id: string) {
         return {
           id: String(data.id),
           title: data.title,
-          clientName: 'API Enterprise Client',
-          industry: 'Digital Services',
+          clientName: 'Cliente corporativo API',
+          industry: 'Servicios digitales',
           channel: 'Google Search',
           status: 'active',
           budget: 20000,
           spent: 5000,
           targetReach: '250K Users',
           imageUri: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80',
-          subtitle: data.body || 'REST API synced marketing campaign',
+          subtitle: data.body || 'Campaña de marketing sincronizada con la API REST',
         };
       } catch (error) {
         return localCampaigns[0];

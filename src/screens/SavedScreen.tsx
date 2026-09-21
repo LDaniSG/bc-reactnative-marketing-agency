@@ -30,8 +30,8 @@ export function SavedScreen({ navigation }: SavedScreenProps): React.JSX.Element
   const renderEmptyComponent = useCallback(
     () => (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyTitle}>No saved campaigns</Text>
-        <Text style={styles.emptySubtitle}>Bookmark client campaigns from the details screen to access quick performance tracking here.</Text>
+        <Text style={styles.emptyTitle}>No hay campañas guardadas</Text>
+        <Text style={styles.emptySubtitle}>Guarda campañas desde su detalle para consultarlas rápidamente aquí.</Text>
       </View>
     ),
     []
@@ -39,16 +39,16 @@ export function SavedScreen({ navigation }: SavedScreenProps): React.JSX.Element
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.background} />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
       <View style={styles.header}>
         <View style={styles.headerRow}>
           <View>
-            <Text style={TYPOGRAPHY.title}>Saved Campaigns</Text>
-            <Text style={TYPOGRAPHY.subtitle}>Bookmarked client records ({savedCampaigns.length})</Text>
+            <Text style={TYPOGRAPHY.title}>Campañas guardadas</Text>
+            <Text style={TYPOGRAPHY.subtitle}>Registros guardados ({savedCampaigns.length})</Text>
           </View>
           {savedCampaigns.length > 0 && (
             <Pressable style={styles.clearButton} onPress={clearSaved}>
-              <Text style={styles.clearButtonText}>Clear All</Text>
+              <Text style={styles.clearButtonText}>Borrar todo</Text>
             </Pressable>
           )}
         </View>

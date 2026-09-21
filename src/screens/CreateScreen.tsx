@@ -20,10 +20,10 @@ export function CreateScreen({ navigation }: CreateCampaignScreenProps): React.J
       {
         title: title.trim(),
         clientName: clientName.trim(),
-        industry: industry.trim() || 'General Business',
+        industry: industry.trim() || 'Negocios generales',
         channel,
         budget: Number(budget) || 10000,
-        subtitle: subtitle.trim() || 'Custom digital marketing acquisition strategy',
+        subtitle: subtitle.trim() || 'Estrategia personalizada de adquisición digital',
       },
       {
         onSuccess: () => navigation.goBack(),
@@ -36,35 +36,35 @@ export function CreateScreen({ navigation }: CreateCampaignScreenProps): React.J
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.background} />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-          <Text style={styles.sectionLabel}>Client & Campaign Details</Text>
+          <Text style={styles.sectionLabel}>Datos del cliente y la campaña</Text>
           <View style={styles.field}>
-            <Text style={styles.fieldLabel}>Campaign Title *</Text>
-            <TextInput style={styles.input} value={title} onChangeText={setTitle} placeholder="e.g., Q4 Enterprise Lead Gen" placeholderTextColor={COLORS.textMuted} />
+            <Text style={styles.fieldLabel}>Nombre de la campaña *</Text>
+            <TextInput style={styles.input} value={title} onChangeText={setTitle} placeholder="Ej.: Lanzamiento colección de verano" placeholderTextColor={COLORS.textMuted} />
           </View>
           <View style={styles.field}>
-            <Text style={styles.fieldLabel}>Client Name *</Text>
-            <TextInput style={styles.input} value={clientName} onChangeText={setClientName} placeholder="e.g., Apex Global Corp" placeholderTextColor={COLORS.textMuted} />
+            <Text style={styles.fieldLabel}>Nombre del cliente *</Text>
+            <TextInput style={styles.input} value={clientName} onChangeText={setClientName} placeholder="Ej.: Apex Global Corp" placeholderTextColor={COLORS.textMuted} />
           </View>
           <View style={styles.field}>
-            <Text style={styles.fieldLabel}>Industry</Text>
-            <TextInput style={styles.input} value={industry} onChangeText={setIndustry} placeholder="e.g., E-Commerce / SaaS / Healthcare" placeholderTextColor={COLORS.textMuted} />
+            <Text style={styles.fieldLabel}>Industria</Text>
+            <TextInput style={styles.input} value={industry} onChangeText={setIndustry} placeholder="Ej.: Comercio electrónico / Salud" placeholderTextColor={COLORS.textMuted} />
           </View>
           <View style={styles.field}>
-            <Text style={styles.fieldLabel}>Budget (USD)</Text>
-            <TextInput style={styles.input} value={budget} onChangeText={setBudget} placeholder="e.g., 15000" keyboardType="numeric" placeholderTextColor={COLORS.textMuted} />
+            <Text style={styles.fieldLabel}>Presupuesto (USD)</Text>
+            <TextInput style={styles.input} value={budget} onChangeText={setBudget} placeholder="Ej.: 15000" keyboardType="numeric" placeholderTextColor={COLORS.textMuted} />
           </View>
           <View style={styles.field}>
-            <Text style={styles.fieldLabel}>Strategy Overview</Text>
-            <TextInput style={[styles.input, styles.multiline]} value={subtitle} onChangeText={setSubtitle} placeholder="Describe campaign goals and target audience..." placeholderTextColor={COLORS.textMuted} multiline numberOfLines={3} textAlignVertical="top" />
+            <Text style={styles.fieldLabel}>Resumen de estrategia</Text>
+            <TextInput style={[styles.input, styles.multiline]} value={subtitle} onChangeText={setSubtitle} placeholder="Describe los objetivos y la audiencia..." placeholderTextColor={COLORS.textMuted} multiline numberOfLines={3} textAlignVertical="top" />
           </View>
           <Pressable style={[styles.button, !canSubmit && styles.buttonDisabled]} onPress={handleSubmit} disabled={!canSubmit}>
-            {isPending ? <ActivityIndicator size="small" color="#ffffff" /> : <Text style={styles.buttonText}>Publish Campaign</Text>}
+            {isPending ? <ActivityIndicator size="small" color="#ffffff" /> : <Text style={styles.buttonText}>Publicar campaña</Text>}
           </Pressable>
           <Pressable style={styles.cancelButton} onPress={() => navigation.goBack()}>
-            <Text style={styles.cancelText}>Cancel</Text>
+            <Text style={styles.cancelText}>Cancelar</Text>
           </Pressable>
         </ScrollView>
       </KeyboardAvoidingView>
