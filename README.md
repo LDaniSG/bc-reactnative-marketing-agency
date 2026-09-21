@@ -1,74 +1,54 @@
-# 🚀 Apex Media Agency
+# Semana 05 — Redes y APIs con Axios + TanStack Query v5
 
-## Plataforma móvil de gestión de marketing digital
-
-> **Programa:** Bootcamp React Native (SENA / Instructor ergrato-dev)
-> **Dominio asignado:** Agencia de Marketing Digital
+> **Bootcamp:** React Native (SENA / Instructor ergrato-dev)
+> **Dominio:** Agencia de Marketing Digital (`Apex Media Agency`)
 > **Aprendiz:** LDaniSG
-> **Entidades principales:** `clients`, `campaigns`, `metrics`, `channels`
+> **Entidades:** `clients`, `campaigns`, `metrics`, `channels`
 
-## 📌 Descripción general
+## 📋 Evidencias de la semana 05
 
-**Apex Media Agency** es una aplicación móvil nativa para gestionar y monitorear campañas de publicidad digital de clientes corporativos desde un único lugar.
+- Cliente HTTP Axios configurado en `src/services/api.ts`.
+- Hooks de TanStack Query v5 para consultar y crear campañas:
+  - `useCampaigns` con `useQuery`.
+  - `useCreateCampaign` con `useMutation`.
+- Lista principal conectada al hook de campañas.
+- Actualización mediante pull-to-refresh con `RefreshControl`.
+- Estados de carga, error y reintento visibles en la pantalla principal.
+- Creación de campañas mediante una pantalla presentada como modal.
+- Invalidación de la consulta de campañas después de crear una campaña.
+- Persistencia en memoria de campañas guardadas mediante Zustand, con contador en la navegación.
 
-La aplicación permite consultar campañas, revisar su detalle, filtrar resultados, crear nuevas campañas, guardar campañas favoritas y explorar canales digitales como Meta Ads, Google Search, LinkedIn Ads, TikTok Ads y Email Marketing. También presenta métricas de negocio como presupuesto, inversión realizada, alcance estimado, CTR, CPC y ROI.
+## 📌 Descripción del proyecto
 
-Los datos se consultan mediante un cliente REST con Axios y TanStack Query v5. El proyecto utiliza datos locales como respaldo para mantener disponible la experiencia de demostración cuando la API no responde.
+**Apex Media Agency** es una aplicación móvil para gestionar campañas de publicidad digital de clientes corporativos. Permite consultar campañas, revisar métricas de presupuesto, inversión, alcance, CTR, CPC y ROI, guardar campañas favoritas y crear nuevas campañas desde la aplicación.
 
-## 🧰 Tecnologías
+Los datos pertenecen al dominio de marketing digital e incluyen canales como Meta Ads, Google Search, LinkedIn Ads, TikTok Ads y Email Marketing.
 
-- React Native con Expo SDK 52
-- TypeScript
-- React Navigation 7
-- Zustand
-- TanStack Query v5
-- Axios
-- Expo Vector Icons
-
-## 📊 Matriz de cumplimiento por semana
-
-| Semana | Tema principal | Evidencias y requisitos cumplidos | Estado |
-| :--- | :--- | :--- | :---: |
-| **`week-01`** | Core Components & Flexbox Layout | Componentes nativos (`View`, `Text`, `Image`, `Pressable`), maquetación responsive con Flexbox y estilos estructurados con `StyleSheet.create`. | ✅ **100%** |
-| **`week-02`** | Listas, inputs y estilos | `FlatList` virtualizada, `keyExtractor` único, filtro en tiempo real con `TextInput` y `useMemo`, estado vacío personalizado, tokens de diseño y manejo del teclado. | ✅ **100%** |
-| **`week-03`** | React Navigation 7 | Navegación combinada con **Bottom Tab Navigator** y **Native Stack Navigator**, rutas tipadas e integración de iconos `Ionicons`. | ✅ **100%** |
-| **`week-04`** | Estado global con Zustand | Tienda global `useSavedCampaignsStore`, guardado y eliminación de campañas favoritas, y contador dinámico en la pestaña de navegación. | ✅ **100%** |
-| **`week-05`** | Redes y APIs | Cliente Axios (`src/services/api.ts`), hooks de TanStack Query (`useCampaigns`, `useCreateCampaign`), pull-to-refresh, creación de campañas y estados de carga y error. | ✅ **100%** |
-
-## 🛠️ Arquitectura y estructura del proyecto
+## 🛠️ Estructura relacionada con la semana 05
 
 ```text
 src/
-├── components/          # Componentes de UI reutilizables (ItemCard.tsx)
-├── data/                # Datos simulados del dominio (mockData.ts)
-├── hooks/               # Hooks de TanStack Query (useItems.ts)
-├── navigation/          # Tab Navigator y Stack Navigator tipados
-├── screens/             # Pantallas de campañas, detalle, creación, guardados y canales
-├── services/            # Cliente HTTP Axios (api.ts)
-├── stores/              # Estado global de favoritos (savedStore.ts)
-├── theme/               # Tokens de diseño y colores (index.ts)
-└── types/               # Interfaces TypeScript del dominio
+├── hooks/useItems.ts              # useCampaigns y useCreateCampaign
+├── navigation/RootNavigator.tsx  # Navegación y modal de creación
+├── screens/HomeScreen.tsx         # Consulta, refresco, carga y error
+├── screens/CreateScreen.tsx       # Formulario de nueva campaña
+├── screens/DetailScreen.tsx       # Detalle y guardado con Zustand
+├── screens/SavedScreen.tsx        # Campañas guardadas
+├── services/api.ts                # Cliente Axios
+├── stores/savedStore.ts           # Estado global de favoritos
+└── types/index.ts                 # Tipos TypeScript del dominio
 ```
 
 ## 🚀 Ejecución
-
-### Requisitos
-
-- Node.js instalado
-- npm instalado
-- Expo CLI disponible mediante `npx`
-
-### Instalación y desarrollo
 
 ```bash
 npm install
 npx expo start --web
 ```
 
-También están disponibles los scripts para iniciar el proyecto en cada plataforma:
+También se puede ejecutar en Android o iOS:
 
 ```bash
 npm run android
 npm run ios
-npm run web
 ```
