@@ -80,6 +80,8 @@ src/
 │   └── colors.ts              # Tokens de diseño (Soft Lavender Light Theme)
 └── types/
     └── marketing.types.ts     # Interfaces TypeScript de Client, Campaign, Metric y Channel
+```
+
 🚀 Ejecución y Desarrollo Local
 Requisitos previos
 Node.js (v18 o superior)
