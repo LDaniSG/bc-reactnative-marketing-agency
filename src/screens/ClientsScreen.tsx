@@ -16,7 +16,11 @@ export const ClientsScreen = () => {
   const { clients } = useMarketing();
   const [search, setSearch] = useState('');
 
+<<<<<<< HEAD
   const filteredClients = clients.filter(
+=======
+  const filteredClients = (clients || []).filter(
+>>>>>>> week-08
     (c) =>
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.company.toLowerCase().includes(search.toLowerCase()) ||
@@ -41,6 +45,7 @@ export const ClientsScreen = () => {
               Cuentas publicitarias activas bajo gestión de la agencia
             </Text>
 
+<<<<<<< HEAD
             {/* Cabecera de Estadísticas de la Cartera */}
             <View style={styles.statsBanner}>
               <View style={styles.statCol}>
@@ -60,6 +65,8 @@ export const ClientsScreen = () => {
             </View>
 
             {/* Buscador */}
+=======
+>>>>>>> week-08
             <View style={styles.searchWrapper}>
               <TextInput
                 style={styles.searchInput}
@@ -89,7 +96,10 @@ export const ClientsScreen = () => {
               </View>
             </View>
 
+<<<<<<< HEAD
             {/* Botones de contacto rápido */}
+=======
+>>>>>>> week-08
             <View style={styles.contactRow}>
               <TouchableOpacity
                 style={styles.actionBtn}
@@ -102,7 +112,11 @@ export const ClientsScreen = () => {
                 style={[styles.actionBtn, styles.actionBtnEmail]}
                 onPress={() => handleContact('Email', item.email)}
               >
+<<<<<<< HEAD
                 <Text style={styles.actionBtnText}>📧 {item.email}</Text>
+=======
+                <Text style={styles.actionBtnText}>📧 Correo</Text>
+>>>>>>> week-08
               </TouchableOpacity>
             </View>
           </View>
@@ -113,6 +127,7 @@ export const ClientsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
   container: {
     flex: 1,
     backgroundColor: darkTheme.background,
@@ -159,6 +174,12 @@ const styles = StyleSheet.create({
   searchWrapper: {
     marginBottom: 14,
   },
+=======
+  container: { flex: 1, backgroundColor: darkTheme.background },
+  title: { fontSize: 22, fontWeight: '800', color: darkTheme.textPrimary },
+  subtitle: { fontSize: 13, color: darkTheme.textSecondary, marginTop: 2, marginBottom: 14 },
+  searchWrapper: { marginBottom: 14 },
+>>>>>>> week-08
   searchInput: {
     backgroundColor: darkTheme.surface,
     borderWidth: 1.5,
@@ -176,6 +197,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     borderWidth: 1.5,
     borderColor: darkTheme.surfaceBorder,
+<<<<<<< HEAD
     shadowColor: '#4F46E5',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
@@ -205,6 +227,14 @@ const styles = StyleSheet.create({
     color: darkTheme.textSecondary,
     marginTop: 1,
   },
+=======
+  },
+  cardHeader: { flexDirection: 'row', alignItems: 'center' },
+  avatar: { width: 52, height: 52, borderRadius: 26, marginRight: 12 },
+  info: { flex: 1 },
+  company: { fontSize: 16, fontWeight: '800', color: darkTheme.textPrimary },
+  name: { fontSize: 13, color: darkTheme.textSecondary, marginTop: 1 },
+>>>>>>> week-08
   industryTag: {
     backgroundColor: '#EEF2FF',
     alignSelf: 'flex-start',
@@ -213,6 +243,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 4,
   },
+<<<<<<< HEAD
   industryText: {
     fontSize: 11,
     fontWeight: '700',
@@ -229,6 +260,11 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '800',
   },
+=======
+  industryText: { fontSize: 11, fontWeight: '700', color: darkTheme.primary },
+  campaignBadge: { backgroundColor: '#E0E7FF', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 12 },
+  campaignBadgeText: { color: darkTheme.primary, fontSize: 11, fontWeight: '800' },
+>>>>>>> week-08
   contactRow: {
     flexDirection: 'row',
     gap: 8,
@@ -245,6 +281,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
   },
+<<<<<<< HEAD
   actionBtnEmail: {
     backgroundColor: '#F0FDFA',
   },
@@ -253,4 +290,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: darkTheme.textPrimary,
   },
+=======
+  actionBtnEmail: { backgroundColor: '#F0FDFA' },
+  actionBtnText: { fontSize: 11, fontWeight: '700', color: darkTheme.textPrimary },
+>>>>>>> week-08
 });

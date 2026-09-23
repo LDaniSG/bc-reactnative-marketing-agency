@@ -44,7 +44,11 @@ export const ChannelBarChart: React.FC<ChannelChartProps> = ({ channels }) => {
 
   return (
     <View style={styles.card}>
+<<<<<<< HEAD
       {channels.map((ch) => {
+=======
+      {(channels || []).map((ch) => {
+>>>>>>> week-08
         const barColor = getChannelColor(ch.platform);
         return (
           <View key={ch.id} style={styles.itemContainer}>
@@ -81,6 +85,7 @@ const styles = StyleSheet.create({
     borderColor: darkTheme.surfaceBorder,
     marginBottom: 12,
   },
+<<<<<<< HEAD
   itemContainer: {
     marginBottom: 16,
   },
@@ -115,4 +120,13 @@ const styles = StyleSheet.create({
     color: darkTheme.textMuted,
     fontWeight: '600',
   },
+=======
+  itemContainer: { marginBottom: 16 },
+  labelRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
+  platformName: { color: darkTheme.textPrimary, fontSize: 13, fontWeight: '700' },
+  shareText: { color: darkTheme.textSecondary, fontSize: 12, fontWeight: '700' },
+  track: { height: 10, backgroundColor: '#E0E7FF', borderRadius: 6, overflow: 'hidden' },
+  fill: { height: '100%', borderRadius: 6 },
+  scoreText: { marginTop: 4, fontSize: 11, color: darkTheme.textMuted, fontWeight: '600' },
+>>>>>>> week-08
 });

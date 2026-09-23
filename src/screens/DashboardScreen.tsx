@@ -14,8 +14,10 @@ import { MarketingApi } from '../api/marketingApi';
 import { CampaignCard } from '../components/campaigns/CampaignCard';
 import { SkeletonLoader } from '../components/common/SkeletonLoader';
 import { AnimatedCounter } from '../components/common/AnimatedCounter';
+import { FadeInView } from '../components/common/FadeInView';
 import { darkTheme } from '../theme/colors';
 import { useHaptics } from '../hooks/useHaptics';
+import { useAuth } from '../context/AuthContext';
 
 export const DashboardScreen = ({ navigation }: { navigation: any }) => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -24,6 +26,7 @@ export const DashboardScreen = ({ navigation }: { navigation: any }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const { triggerImpact } = useHaptics();
+  const { user, logout } = useAuth();
 
   const loadData = useCallback(async () => {
     try {
@@ -53,7 +56,6 @@ export const DashboardScreen = ({ navigation }: { navigation: any }) => {
     setCampaigns((prev) => prev.map((c) => (c.id === id ? updated : c)));
   };
 
-  // Filtrado compuesto (Buscador + Pills de estado)
   const filteredCampaigns = campaigns.filter((c) => {
     const matchesSearch =
       c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -63,7 +65,6 @@ export const DashboardScreen = ({ navigation }: { navigation: any }) => {
     return matchesSearch && matchesStatus;
   });
 
-  // Métricas Consolidadas
   const totalSpent = campaigns.reduce((acc, c) => acc + c.spent, 0);
   const totalBudget = campaigns.reduce((acc, c) => acc + c.budget, 0);
   const avgRoas = campaigns.length
@@ -91,54 +92,58 @@ export const DashboardScreen = ({ navigation }: { navigation: any }) => {
         }
         ListHeaderComponent={
           <View>
-            {/* 1. Hero Banner de Bienvenida */}
-            <View style={styles.heroBanner}>
-              <View style={styles.heroTextCol}>
-                <Text style={styles.heroTitle}>👋 ¡Hola, Marketing Team!</Text>
-                <Text style={styles.heroSubtitle}>
-                  Monitoreo en tiempo real de Meta, Google, TikTok y LinkedIn Ads
-                </Text>
+            {/* 1. Hero Banner Animado de Bienvenida */}
+            <FadeInView duration={600} delay={100}>
+              <View style={styles.heroBanner}>
+                <View style={styles.heroTextCol}>
+                  <Text style={styles.heroTitle}>👋 ¡Hola, {user?.name || 'Media Buyer'}!</Text>
+                  <Text style={styles.heroSubtitle}>
+                    Monitoreo en tiempo real de Meta, Google, TikTok y LinkedIn Ads
+                  </Text>
+                </View>
+                <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
+                  <Text style={styles.logoutText}>🚪 Salir</Text>
+                </TouchableOpacity>
               </View>
-              <View style={styles.liveBadge}>
-                <Text style={styles.liveBadgeText}>🟢 EN VIVO</Text>
-              </View>
-            </View>
+            </FadeInView>
 
-            {/* 2. Grid de 4 KPIs Principales */}
-            <View style={styles.kpiGrid}>
-              <View style={styles.kpiCard}>
-                <Text style={styles.kpiEmoji}>💳</Text>
-                <Text style={styles.kpiSub}>Inversión Total</Text>
-                <AnimatedCounter value={totalSpent} prefix="$" decimals={0} style={styles.kpiMain} />
-                <Text style={styles.kpiFoot}>de ${totalBudget.toLocaleString()} USD</Text>
-              </View>
+            {/* 2. Grid de 4 KPIs Principales Animados */}
+            <FadeInView duration={600} delay={250}>
+              <View style={styles.kpiGrid}>
+                <View style={styles.kpiCard}>
+                  <Text style={styles.kpiEmoji}>💳</Text>
+                  <Text style={styles.kpiSub}>Inversión Total</Text>
+                  <AnimatedCounter value={totalSpent} prefix="$" decimals={0} style={styles.kpiMain} />
+                  <Text style={styles.kpiFoot}>de ${totalBudget.toLocaleString()} USD</Text>
+                </View>
 
-              <View style={[styles.kpiCard, styles.kpiCardRoas]}>
-                <Text style={styles.kpiEmoji}>📈</Text>
-                <Text style={styles.kpiSub}>ROAS Medio</Text>
-                <AnimatedCounter
-                  value={avgRoas}
-                  suffix="x"
-                  decimals={2}
-                  style={[styles.kpiMain, { color: darkTheme.success }]}
-                />
-                <Text style={styles.kpiFoot}>Retorno de pauta</Text>
-              </View>
+                <View style={[styles.kpiCard, styles.kpiCardRoas]}>
+                  <Text style={styles.kpiEmoji}>📈</Text>
+                  <Text style={styles.kpiSub}>ROAS Medio</Text>
+                  <AnimatedCounter
+                    value={avgRoas}
+                    suffix="x"
+                    decimals={2}
+                    style={[styles.kpiMain, { color: darkTheme.success }]}
+                  />
+                  <Text style={styles.kpiFoot}>Retorno de pauta</Text>
+                </View>
 
-              <View style={styles.kpiCard}>
-                <Text style={styles.kpiEmoji}>🎯</Text>
-                <Text style={styles.kpiSub}>Conversiones</Text>
-                <AnimatedCounter value={totalConversions} decimals={0} style={styles.kpiMain} />
-                <Text style={styles.kpiFoot}>Leads & Ventas</Text>
-              </View>
+                <View style={styles.kpiCard}>
+                  <Text style={styles.kpiEmoji}>🎯</Text>
+                  <Text style={styles.kpiSub}>Conversiones</Text>
+                  <AnimatedCounter value={totalConversions} decimals={0} style={styles.kpiMain} />
+                  <Text style={styles.kpiFoot}>Leads & Ventas</Text>
+                </View>
 
-              <View style={styles.kpiCard}>
-                <Text style={styles.kpiEmoji}>⚡</Text>
-                <Text style={styles.kpiSub}>Clics Totales</Text>
-                <AnimatedCounter value={totalClicks} decimals={0} style={styles.kpiMain} />
-                <Text style={styles.kpiFoot}>Tráfico generado</Text>
+                <View style={styles.kpiCard}>
+                  <Text style={styles.kpiEmoji}>⚡</Text>
+                  <Text style={styles.kpiSub}>Clics Totales</Text>
+                  <AnimatedCounter value={totalClicks} decimals={0} style={styles.kpiMain} />
+                  <Text style={styles.kpiFoot}>Tráfico generado</Text>
+                </View>
               </View>
-            </View>
+            </FadeInView>
 
             {/* 3. Buscador */}
             <View style={styles.searchContainer}>
@@ -203,13 +208,15 @@ export const DashboardScreen = ({ navigation }: { navigation: any }) => {
             </View>
           </View>
         }
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <View style={{ paddingHorizontal: 16 }}>
-            <CampaignCard
-              campaign={item}
-              onPress={() => navigation.navigate('CampaignDetail', { campaign: item })}
-              onToggleStatus={handleToggleStatus}
-            />
+            <FadeInView duration={400} delay={index * 100}>
+              <CampaignCard
+                campaign={item}
+                onPress={() => navigation.navigate('CampaignDetail', { campaign: item })}
+                onToggleStatus={handleToggleStatus}
+              />
+            </FadeInView>
           </View>
         )}
         ListEmptyComponent={
@@ -231,58 +238,23 @@ export const DashboardScreen = ({ navigation }: { navigation: any }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: darkTheme.background,
-  },
+  container: { flex: 1, backgroundColor: darkTheme.background },
   heroBanner: {
     backgroundColor: darkTheme.primary,
     marginHorizontal: 16,
     marginTop: 12,
     borderRadius: 18,
-    padding: 18,
+    padding: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    shadowColor: darkTheme.primary,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 4,
   },
-  heroTextCol: {
-    flex: 1,
-    paddingRight: 10,
-  },
-  heroTitle: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    fontWeight: '800',
-  },
-  heroSubtitle: {
-    color: '#E0E7FF',
-    fontSize: 12,
-    marginTop: 4,
-    lineHeight: 16,
-  },
-  liveBadge: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 20,
-  },
-  liveBadgeText: {
-    color: '#FFFFFF',
-    fontSize: 10,
-    fontWeight: '800',
-  },
-  kpiGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: 12,
-    marginTop: 14,
-    gap: 8,
-  },
+  heroTextCol: { flex: 1, paddingRight: 10 },
+  heroTitle: { color: '#FFFFFF', fontSize: 18, fontWeight: '800' },
+  heroSubtitle: { color: '#E0E7FF', fontSize: 12, marginTop: 4 },
+  logoutBtn: { backgroundColor: 'rgba(255, 255, 255, 0.2)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
+  logoutText: { color: '#FFFFFF', fontSize: 11, fontWeight: '800' },
+  kpiGrid: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 12, marginTop: 14, gap: 8 },
   kpiCard: {
     width: '48%',
     backgroundColor: darkTheme.surface,
@@ -290,41 +262,13 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1.5,
     borderColor: darkTheme.surfaceBorder,
-    shadowColor: '#4F46E5',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
   },
-  kpiCardRoas: {
-    borderColor: '#A5F3FC',
-    backgroundColor: '#F0FDFA',
-  },
-  kpiEmoji: {
-    fontSize: 16,
-    marginBottom: 2,
-  },
-  kpiSub: {
-    color: darkTheme.textMuted,
-    fontSize: 10,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-  },
-  kpiMain: {
-    fontSize: 22,
-    fontWeight: '800',
-    marginTop: 2,
-    color: darkTheme.textPrimary,
-  },
-  kpiFoot: {
-    color: darkTheme.textSecondary,
-    fontSize: 11,
-    marginTop: 2,
-  },
-  searchContainer: {
-    paddingHorizontal: 16,
-    marginTop: 14,
-  },
+  kpiCardRoas: { borderColor: '#A5F3FC', backgroundColor: '#F0FDFA' },
+  kpiEmoji: { fontSize: 16, marginBottom: 2 },
+  kpiSub: { color: darkTheme.textMuted, fontSize: 10, fontWeight: '700', textTransform: 'uppercase' },
+  kpiMain: { fontSize: 22, fontWeight: '800', marginTop: 2, color: darkTheme.textPrimary },
+  kpiFoot: { color: darkTheme.textSecondary, fontSize: 11, marginTop: 2 },
+  searchContainer: { paddingHorizontal: 16, marginTop: 14 },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -335,23 +279,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
-  searchIcon: {
-    fontSize: 16,
-    marginRight: 8,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 14,
-    color: darkTheme.textPrimary,
-  },
-  clearIcon: {
-    fontSize: 14,
-    color: darkTheme.textMuted,
-    paddingHorizontal: 4,
-  },
-  filterRow: {
-    marginTop: 12,
-  },
+  searchIcon: { fontSize: 16, marginRight: 8 },
+  searchInput: { flex: 1, fontSize: 14, color: darkTheme.textPrimary },
+  clearIcon: { fontSize: 14, color: darkTheme.textMuted, paddingHorizontal: 4 },
+  filterRow: { marginTop: 12 },
   filterPill: {
     paddingHorizontal: 14,
     paddingVertical: 7,
@@ -360,18 +291,9 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: darkTheme.surfaceBorder,
   },
-  filterPillActive: {
-    backgroundColor: darkTheme.primary,
-    borderColor: darkTheme.primary,
-  },
-  filterPillText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: darkTheme.textSecondary,
-  },
-  filterPillTextActive: {
-    color: '#FFFFFF',
-  },
+  filterPillActive: { backgroundColor: darkTheme.primary, borderColor: darkTheme.primary },
+  filterPillText: { fontSize: 12, fontWeight: '700', color: darkTheme.textSecondary },
+  filterPillTextActive: { color: '#FFFFFF' },
   listHeaderRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -380,39 +302,11 @@ const styles = StyleSheet.create({
     marginTop: 18,
     marginBottom: 10,
   },
-  sectionTitle: {
-    color: darkTheme.textPrimary,
-    fontSize: 17,
-    fontWeight: '800',
-  },
-  createBtn: {
-    backgroundColor: darkTheme.primary,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-  createBtnText: {
-    color: '#FFFFFF',
-    fontWeight: '800',
-    fontSize: 13,
-  },
-  emptyBox: {
-    alignItems: 'center',
-    marginTop: 40,
-    padding: 24,
-  },
-  emptyEmoji: {
-    fontSize: 36,
-    marginBottom: 8,
-  },
-  emptyText: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: darkTheme.textPrimary,
-  },
-  emptySub: {
-    fontSize: 13,
-    color: darkTheme.textSecondary,
-    marginTop: 2,
-  },
+  sectionTitle: { color: darkTheme.textPrimary, fontSize: 17, fontWeight: '800' },
+  createBtn: { backgroundColor: darkTheme.primary, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20 },
+  createBtnText: { color: '#FFFFFF', fontWeight: '800', fontSize: 13 },
+  emptyBox: { alignItems: 'center', marginTop: 40, padding: 24 },
+  emptyEmoji: { fontSize: 36, marginBottom: 8 },
+  emptyText: { fontSize: 15, fontWeight: '700', color: darkTheme.textPrimary },
+  emptySub: { fontSize: 13, color: darkTheme.textSecondary, marginTop: 2 },
 });

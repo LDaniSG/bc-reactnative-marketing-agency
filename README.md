@@ -1,13 +1,10 @@
-# 📊 Semana 09 - Estado Global, Analítica de Canales y Navegación Final
+# 🎨 Semana 09 - Animaciones Básicas con la API Animated
 
 **Dominio:** Agencia de Marketing Digital  
 **Entidades:** `clients`, `campaigns`, `metrics`, `channels`
 
-## 📋 Descripción de la Entrega
-Entrega final que consolida la arquitectura completa del proyecto con estado global, analítica gráfica por canal publicitario, filtros interactivos y navegación por pestañas.
-
-## 🛠️ Implementaciones Técnicas
-- **Estado Global (`src/context/MarketingContext.tsx`):** Uso de `React Context` para la gestión centralizada de campañas y clientes.
-- **Navegación por Pestañas (`src/navigation/TabNavigator.tsx`):** Menú inferior con pantallas dedicadas para *Campañas*, *Canales* y *Clientes*.
-- **Desglose de Canales (`src/components/metrics/ChannelBarChart.tsx`):** Gráfico de distribución de pauta para Meta Ads, Google Ads, TikTok Ads y LinkedIn Ads.
-- **Buscador y Filtros Combinados:** Búsqueda en tiempo real y filtrado de campañas por estado (*Activas / Pausadas*).
+## 📋 Descripción
+Integración de la API nativa `Animated` de React Native para la creación de micro-interacciones y transiciones fluidas en la interfaz de usuario:
+- **`FadeInView` (`src/components/common/FadeInView.tsx`):** Animación compuesta de entrada con opacidad gradual (`Animated.timing`) y desplazamiento elástico (`Animated.spring`).
+- **Contadores Numéricos Animados (`src/components/common/AnimatedCounter.tsx`):** Interpolación de valores de dinero e indicadores de ROAS.
+- **Micro-interacciones Gestuales (`src/components/campaigns/CampaignCard.tsx`):** Respuesta de escalado elástico `Animated.spring` al interactuar con las tarjetas de pauta publicitaria.
