@@ -1,13 +1,16 @@
 import React from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { RootNavigator } from './src/navigation/RootNavigator';
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { MarketingProvider } from './src/context/MarketingContext';
+import { AppNavigator } from './src/navigation/AppNavigator';
 
-const queryClient = new QueryClient();
-
-export default function App(): React.JSX.Element {
+export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <RootNavigator />
-    </QueryClientProvider>
+    <SafeAreaProvider>
+      <MarketingProvider>
+        <StatusBar style="light" />
+        <AppNavigator />
+      </MarketingProvider>
+    </SafeAreaProvider>
   );
 }
