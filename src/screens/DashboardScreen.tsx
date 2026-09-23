@@ -6,17 +6,20 @@ import {
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import { Campaign } from '../types/marketing.types';
 import { MarketingApi } from '../api/marketingApi';
+import { CampaignCard } from '../components/campaigns/CampaignCard';
 import { SkeletonLoader } from '../components/common/SkeletonLoader';
+import { AnimatedCounter } from '../components/common/AnimatedCounter';
 import { darkTheme } from '../theme/colors';
+import { useHaptics } from '../hooks/useHaptics';
 
 export const DashboardScreen = ({ navigation }: { navigation: any }) => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const { triggerImpact } = useHaptics();
 
   const loadData = useCallback(async () => {
     try {
@@ -36,66 +39,65 @@ export const DashboardScreen = ({ navigation }: { navigation: any }) => {
 
   const onRefresh = () => {
     setRefreshing(true);
+    triggerImpact();
     loadData();
   };
 
-  const handleToggle = async (id: string) => {
+  const handleToggleStatus = async (id: string) => {
+    triggerImpact();
     const updated = await MarketingApi.toggleCampaignStatus(id);
     setCampaigns((prev) => prev.map((c) => (c.id === id ? updated : c)));
   };
 
+  const totalSpent = campaigns.reduce((acc, c) => acc + c.spent, 0);
+  const totalBudget = campaigns.reduce((acc, c) => acc + c.budget, 0);
+  const avgRoas = campaigns.length
+    ? campaigns.reduce((acc, c) => acc + c.metrics.roas, 0) / campaigns.length
+    : 0;
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Panel de Campañas</Text>
-        <TouchableOpacity
-          style={styles.addBtn}
-          onPress={() => navigation.navigate('CreateCampaign')}
-        >
-          <Text style={styles.addBtnText}>+ Crear</Text>
+      <View style={styles.kpiContainer}>
+        <View style={styles.kpiCard}>
+          <Text style={styles.kpiSub}>Inversión Total</Text>
+          <AnimatedCounter value={totalSpent} prefix="$" decimals={0} style={styles.kpiMain} />
+          <Text style={styles.kpiFoot}>de ${totalBudget.toLocaleString()} USD</Text>
+        </View>
+
+        <View style={[styles.kpiCard, { borderColor: darkTheme.success }]}>
+          <Text style={styles.kpiSub}>ROAS Medio</Text>
+          <AnimatedCounter value={avgRoas} suffix="x" decimals={2} style={[styles.kpiMain, { color: darkTheme.success }]} />
+          <Text style={styles.kpiFoot}>Retorno publicitario</Text>
+        </View>
+      </View>
+
+      <View style={styles.listHeaderRow}>
+        <Text style={styles.sectionTitle}>Campañas Activas ({campaigns.length})</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('CreateCampaign')}>
+          <Text style={styles.createBtnLink}>+ Nueva Campaña</Text>
         </TouchableOpacity>
       </View>
 
       {loading ? (
         <View style={{ padding: 16 }}>
-          <SkeletonLoader width="100%" height={160} borderRadius={16} />
+          <SkeletonLoader width="100%" height={180} borderRadius={16} />
           <View style={{ height: 16 }} />
-          <SkeletonLoader width="100%" height={160} borderRadius={16} />
+          <SkeletonLoader width="100%" height={180} borderRadius={16} />
         </View>
       ) : (
         <FlatList
           data={campaigns}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ padding: 16 }}
+          contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
           refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor={darkTheme.primary}
-            />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={darkTheme.primary} />
           }
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.card}>
-              <Image source={{ uri: item.bannerUrl }} style={styles.banner} />
-              <View style={styles.cardContent}>
-                <View style={styles.row}>
-                  <Text style={styles.client}>{item.clientName}</Text>
-                  <TouchableOpacity
-                    onPress={() => handleToggle(item.id)}
-                    style={[
-                      styles.badge,
-                      item.status === 'active' ? styles.badgeActive : styles.badgePaused,
-                    ]}
-                  >
-                    <Text style={styles.badgeText}>{item.status.toUpperCase()}</Text>
-                  </TouchableOpacity>
-                </View>
-                <Text style={styles.cardTitle}>{item.title}</Text>
-                <Text style={styles.metricsPreview}>
-                  Invertido: ${item.spent.toLocaleString()} / ${item.budget.toLocaleString()} USD
-                </Text>
-              </View>
-            </TouchableOpacity>
+            <CampaignCard
+              campaign={item}
+              onPress={() => navigation.navigate('CampaignDetail', { campaign: item })}
+              onToggleStatus={handleToggleStatus}
+            />
           )}
         />
       )}
@@ -108,80 +110,50 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: darkTheme.background,
   },
-  header: {
+  kpiContainer: {
+    flexDirection: 'row',
+    padding: 16,
+    gap: 12,
+  },
+  kpiCard: {
+    flex: 1,
+    backgroundColor: darkTheme.surface,
+    padding: 14,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: darkTheme.surfaceBorder,
+  },
+  kpiSub: {
+    color: darkTheme.textMuted,
+    fontSize: 11,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+  },
+  kpiMain: {
+    fontSize: 22,
+    fontWeight: '800',
+    marginTop: 4,
+  },
+  kpiFoot: {
+    color: darkTheme.textSecondary,
+    fontSize: 11,
+    marginTop: 2,
+  },
+  listHeaderRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 8,
+    marginBottom: 8,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: '800',
+  sectionTitle: {
     color: '#FFF',
-  },
-  addBtn: {
-    backgroundColor: darkTheme.primary,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  addBtnText: {
-    color: '#FFF',
+    fontSize: 17,
     fontWeight: '700',
   },
-  card: {
-    backgroundColor: darkTheme.cardBg,
-    borderRadius: 14,
-    marginBottom: 16,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: darkTheme.surfaceBorder,
-  },
-  banner: {
-    width: '100%',
-    height: 120,
-  },
-  cardContent: {
-    padding: 14,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  client: {
-    color: darkTheme.secondary,
+  createBtnLink: {
+    color: darkTheme.primary,
     fontWeight: '700',
-    fontSize: 12,
-    textTransform: 'uppercase',
-  },
-  badge: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-  },
-  badgeActive: {
-    backgroundColor: darkTheme.success,
-  },
-  badgePaused: {
-    backgroundColor: darkTheme.warning,
-  },
-  badgeText: {
-    color: '#FFF',
-    fontSize: 10,
-    fontWeight: '800',
-  },
-  cardTitle: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '700',
-    marginTop: 4,
-    marginBottom: 6,
-  },
-  metricsPreview: {
-    color: darkTheme.textSecondary,
-    fontSize: 13,
+    fontSize: 14,
   },
 });
