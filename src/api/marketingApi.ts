@@ -56,6 +56,16 @@ export const MarketingApi = {
     return [...INITIAL_CLIENTS];
   },
 
+  async createCampaign(campaign: Omit<Campaign, 'id'>): Promise<Campaign> {
+    await delay(700);
+    const newCampaign: Campaign = {
+      ...campaign,
+      id: `cmp-${Date.now()}`,
+    };
+    INITIAL_CAMPAIGNS = [newCampaign, ...INITIAL_CAMPAIGNS];
+    return newCampaign;
+  },
+
   async toggleCampaignStatus(id: string): Promise<Campaign> {
     await delay(300);
     const item = INITIAL_CAMPAIGNS.find((c) => c.id === id);
