@@ -39,6 +39,7 @@ export const CampaignCard: React.FC<CardProps> = ({ campaign, onPress, onToggleS
   };
 
   const progress = Math.min((campaign.spent / (campaign.budget || 1)) * 100, 100);
+  const isActive = campaign.status === 'active';
 
   return (
     <Animated.View style={[{ transform: [{ scale }] }]}>
@@ -50,42 +51,63 @@ export const CampaignCard: React.FC<CardProps> = ({ campaign, onPress, onToggleS
         style={styles.card}
       >
         <Image source={{ uri: campaign.bannerUrl }} style={styles.banner} />
+
         <View style={styles.badgeRow}>
           <TouchableOpacity
             onPress={() => onToggleStatus(campaign.id)}
-            style={[styles.statusBadge, campaign.status === 'active' ? styles.badgeActive : styles.badgePaused]}
+            style={[styles.statusBadge, isActive ? styles.badgeActive : styles.badgePaused]}
           >
-            <Text style={styles.statusText}>{campaign.status.toUpperCase()}</Text>
+            <Text style={styles.statusText}>
+              {isActive ? '● ACTIVE' : '⏸ PAUSED'}
+            </Text>
           </TouchableOpacity>
+
           <TouchableOpacity style={styles.shareBtn} onPress={handleShareReport}>
             <Text style={styles.shareIcon}>📤 Compartir</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.body}>
-          <Text style={styles.client}>{campaign.clientName}</Text>
+          <Text style={styles.client}>👤 {campaign.clientName}</Text>
           <Text style={styles.title}>{campaign.title}</Text>
 
           <View style={styles.budgetRow}>
-            <Text style={styles.budgetLabel}>Presupuesto Consumido</Text>
-            <Text style={styles.budgetValue}>${campaign.spent.toLocaleString()} / ${campaign.budget.toLocaleString()}</Text>
+            <Text style={styles.budgetLabel}>Presupuesto consumido</Text>
+            <Text style={styles.budgetValue}>
+              ${campaign.spent.toLocaleString()} / ${campaign.budget.toLocaleString()}
+            </Text>
           </View>
+
           <View style={styles.progressBarBg}>
-            <View style={[styles.progressBarFill, { width: `${progress}%` }]} />
+            <View
+              style={[
+                styles.progressBarFill,
+                {
+                  width: `${progress}%`,
+                  backgroundColor: progress > 85 ? darkTheme.accent : darkTheme.primary,
+                },
+              ]}
+            />
           </View>
 
           <View style={styles.statsGrid}>
             <View style={styles.statItem}>
               <Text style={styles.statSub}>ROAS</Text>
-              <Text style={[styles.statValue, { color: darkTheme.success }]}>{campaign.metrics.roas}x</Text>
+              <Text style={[styles.statValue, { color: darkTheme.success }]}>
+                {campaign.metrics.roas}x
+              </Text>
             </View>
             <View style={styles.statItem}>
               <Text style={styles.statSub}>CTR</Text>
-              <Text style={styles.statValue}>{campaign.metrics.ctr}%</Text>
+              <Text style={[styles.statValue, { color: darkTheme.secondary }]}>
+                {campaign.metrics.ctr}%
+              </Text>
             </View>
             <View style={styles.statItem}>
               <Text style={styles.statSub}>Conversiones</Text>
-              <Text style={styles.statValue}>{campaign.metrics.conversions.toLocaleString()}</Text>
+              <Text style={styles.statValue}>
+                {campaign.metrics.conversions.toLocaleString()}
+              </Text>
             </View>
           </View>
         </View>
@@ -97,11 +119,16 @@ export const CampaignCard: React.FC<CardProps> = ({ campaign, onPress, onToggleS
 const styles = StyleSheet.create({
   card: {
     backgroundColor: darkTheme.cardBg,
-    borderRadius: 16,
-    marginBottom: 18,
-    borderWidth: 1,
+    borderRadius: 18,
+    marginBottom: 16,
+    borderWidth: 1.5,
     borderColor: darkTheme.surfaceBorder,
     overflow: 'hidden',
+    shadowColor: '#4F46E5',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 3,
   },
   banner: {
     width: '100%',
@@ -118,30 +145,33 @@ const styles = StyleSheet.create({
   },
   statusBadge: {
     paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
+    paddingVertical: 5,
+    borderRadius: 20,
   },
   badgeActive: {
-    backgroundColor: 'rgba(16, 185, 129, 0.9)',
+    backgroundColor: 'rgba(16, 185, 129, 0.95)',
   },
   badgePaused: {
-    backgroundColor: 'rgba(245, 158, 11, 0.9)',
+    backgroundColor: 'rgba(245, 158, 11, 0.95)',
   },
   statusText: {
     color: '#FFF',
     fontSize: 11,
     fontWeight: '800',
+    letterSpacing: 0.3,
   },
   shareBtn: {
-    backgroundColor: 'rgba(15, 23, 42, 0.8)',
+    backgroundColor: 'rgba(255, 255, 255, 0.92)',
     paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
+    paddingVertical: 5,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: darkTheme.surfaceBorder,
   },
   shareIcon: {
-    color: '#FFF',
+    color: darkTheme.textPrimary,
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   body: {
     padding: 16,
@@ -151,12 +181,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     textTransform: 'uppercase',
+    letterSpacing: 0.4,
   },
   title: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: '700',
-    marginTop: 2,
+    color: darkTheme.textPrimary,
+    fontSize: 17,
+    fontWeight: '800',
+    marginTop: 4,
     marginBottom: 12,
   },
   budgetRow: {
@@ -167,43 +198,45 @@ const styles = StyleSheet.create({
   budgetLabel: {
     color: darkTheme.textMuted,
     fontSize: 12,
+    fontWeight: '600',
   },
   budgetValue: {
     color: darkTheme.textSecondary,
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   progressBarBg: {
-    height: 6,
-    backgroundColor: '#1E293B',
-    borderRadius: 4,
+    height: 8,
+    backgroundColor: '#E0E7FF',
+    borderRadius: 6,
     overflow: 'hidden',
     marginBottom: 14,
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: darkTheme.primary,
-    borderRadius: 4,
+    borderRadius: 6,
   },
   statsGrid: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: 10,
+    paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#1E293B',
+    borderTopColor: '#E0E7FF',
   },
   statItem: {
     alignItems: 'center',
+    flex: 1,
   },
   statSub: {
     color: darkTheme.textMuted,
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: '700',
+    textTransform: 'uppercase',
   },
   statValue: {
-    color: '#FFF',
+    color: darkTheme.textPrimary,
     fontSize: 15,
     fontWeight: '800',
-    marginTop: 2,
+    marginTop: 3,
   },
 });

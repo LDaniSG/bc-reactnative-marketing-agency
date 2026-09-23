@@ -18,21 +18,43 @@ export const ChannelBarChart: React.FC<ChannelChartProps> = ({ channels }) => {
         return '#FE2C55';
       case 'LinkedIn Ads':
         return '#0A66C2';
+      case 'Email Marketing':
+        return '#8B5CF6';
       default:
         return darkTheme.primary;
     }
   };
 
+  const getChannelEmoji = (platform: string) => {
+    switch (platform) {
+      case 'Meta Ads':
+        return '📘';
+      case 'Google Ads':
+        return '🔍';
+      case 'TikTok Ads':
+        return '🎵';
+      case 'LinkedIn Ads':
+        return '💼';
+      case 'Email Marketing':
+        return '📧';
+      default:
+        return '📡';
+    }
+  };
+
   return (
     <View style={styles.card}>
-      <Text style={styles.heading}>Distribución por Canales de Pauta</Text>
       {channels.map((ch) => {
         const barColor = getChannelColor(ch.platform);
         return (
           <View key={ch.id} style={styles.itemContainer}>
             <View style={styles.labelRow}>
-              <Text style={styles.platformName}>{ch.platform}</Text>
-              <Text style={styles.shareText}>{ch.sharePercentage}% (${ch.spent.toLocaleString()} USD)</Text>
+              <Text style={styles.platformName}>
+                {getChannelEmoji(ch.platform)} {ch.platform}
+              </Text>
+              <Text style={styles.shareText}>
+                {ch.sharePercentage}% · ${ch.spent.toLocaleString()}
+              </Text>
             </View>
             <View style={styles.track}>
               <View
@@ -42,6 +64,7 @@ export const ChannelBarChart: React.FC<ChannelChartProps> = ({ channels }) => {
                 ]}
               />
             </View>
+            <Text style={styles.scoreText}>Score: {ch.performanceScore}/100</Text>
           </View>
         );
       })}
@@ -54,18 +77,12 @@ const styles = StyleSheet.create({
     backgroundColor: darkTheme.cardBg,
     borderRadius: 16,
     padding: 16,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: darkTheme.surfaceBorder,
-    marginBottom: 20,
-  },
-  heading: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   itemContainer: {
-    marginBottom: 12,
+    marginBottom: 16,
   },
   labelRow: {
     flexDirection: 'row',
@@ -73,23 +90,29 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   platformName: {
-    color: darkTheme.textSecondary,
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  shareText: {
-    color: '#FFF',
+    color: darkTheme.textPrimary,
     fontSize: 13,
     fontWeight: '700',
   },
+  shareText: {
+    color: darkTheme.textSecondary,
+    fontSize: 12,
+    fontWeight: '700',
+  },
   track: {
-    height: 8,
-    backgroundColor: '#1E293B',
-    borderRadius: 4,
+    height: 10,
+    backgroundColor: '#E0E7FF',
+    borderRadius: 6,
     overflow: 'hidden',
   },
   fill: {
     height: '100%',
-    borderRadius: 4,
+    borderRadius: 6,
+  },
+  scoreText: {
+    marginTop: 4,
+    fontSize: 11,
+    color: darkTheme.textMuted,
+    fontWeight: '600',
   },
 });

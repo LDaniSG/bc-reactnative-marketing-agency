@@ -1,8 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-// Importaciones con ruta directa
 import { DashboardScreen } from '../screens/DashboardScreen';
 import { CampaignDetailScreen } from '../screens/CampaignDetailScreen';
 import { CreateCampaignScreen } from '../screens/CreateCampaignScreen';
@@ -15,16 +13,25 @@ export const AppNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerStyle: { backgroundColor: darkTheme.surface },
-          headerTintColor: '#FFF',
-          headerTitleStyle: { fontWeight: '700' },
-          contentStyle: { backgroundColor: darkTheme.background },
+          headerStyle: {
+            backgroundColor: darkTheme.surface,
+          },
+          headerTintColor: darkTheme.primary,
+          headerTitleStyle: {
+            fontWeight: '800',
+            fontSize: 17,
+            color: darkTheme.textPrimary,
+          },
+          headerShadowVisible: false,
+          contentStyle: {
+            backgroundColor: darkTheme.background,
+          },
         }}
       >
         <Stack.Screen
           name="Dashboard"
           component={DashboardScreen}
-          options={{ title: '⚡ Marketing Agency Hub' }}
+          options={{ title: 'Marketing Agency Hub' }}
         />
         <Stack.Screen
           name="CampaignDetail"
@@ -34,7 +41,7 @@ export const AppNavigator = () => {
         <Stack.Screen
           name="CreateCampaign"
           component={CreateCampaignScreen}
-          options={{ title: 'Lanzar Campaña' }}
+          options={{ title: 'Nueva Campaña' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

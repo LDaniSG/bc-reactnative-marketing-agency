@@ -25,12 +25,17 @@ export const CreateCampaignScreen: React.FC<{ navigation: any }> = ({ navigation
   const [bannerUri, setBannerUri] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const objectives: CampaignObjective[] = ['Conversions', 'Traffic', 'Brand Awareness', 'Lead Generation'];
+  const objectives: CampaignObjective[] = [
+    'Conversions',
+    'Traffic',
+    'Brand Awareness',
+    'Lead Generation',
+  ];
 
   const pickBannerImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permiso requerido', 'Se requiere acceso a la galería para adjuntar el creativo de campaña.');
+      Alert.alert('Permiso requerido', 'Necesitamos acceso a la galería para el creativo.');
       return;
     }
 
@@ -49,7 +54,7 @@ export const CreateCampaignScreen: React.FC<{ navigation: any }> = ({ navigation
   const takeBannerPhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permiso requerido', 'Se requiere acceso a la cámara.');
+      Alert.alert('Permiso requerido', 'Necesitamos acceso a la cámara.');
       return;
     }
 
@@ -67,7 +72,7 @@ export const CreateCampaignScreen: React.FC<{ navigation: any }> = ({ navigation
   const handleSave = async () => {
     if (!title.trim() || !clientName.trim() || !budget.trim()) {
       triggerWarning();
-      Alert.alert('Campos vacíos', 'Por favor llena los campos requeridos.');
+      Alert.alert('Campos incompletos', 'Por favor completa título, cliente y presupuesto.');
       return;
     }
 
@@ -83,9 +88,16 @@ export const CreateCampaignScreen: React.FC<{ navigation: any }> = ({ navigation
         status: 'active',
         startDate: new Date().toISOString().split('T')[0],
         endDate: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
-        bannerUrl: bannerUri || 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600',
+        bannerUrl: bannerUri || 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800',
         channels: [
-          { id: `ch-${Date.now()}`, platform: 'Meta Ads', budgetAllocated: parseFloat(budget) || 1000, spent: 0, sharePercentage: 100, performanceScore: 90 },
+          {
+            id: `ch-${Date.now()}`,
+            platform: 'Meta Ads',
+            budgetAllocated: parseFloat(budget) || 1000,
+            spent: 0,
+            sharePercentage: 100,
+            performanceScore: 90,
+          },
         ],
         metrics: {
           impressions: 0,
@@ -99,20 +111,22 @@ export const CreateCampaignScreen: React.FC<{ navigation: any }> = ({ navigation
       });
 
       triggerSuccess();
-      Alert.alert('Éxito', '¡Campaña publicitaria lanzada con éxito!');
+      Alert.alert('¡Éxito!', 'Campaña lanzada correctamente 🚀');
       navigation.goBack();
     } catch {
-      Alert.alert('Error', 'No se pudo guardar la campaña.');
+      Alert.alert('Error', 'No se pudo crear la campaña.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
-      <Text style={styles.sectionHeader}>Nuevo Lanzamiento de Campaña</Text>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 48 }}>
+      <Text style={styles.sectionHeader}>🚀 Nuevo Lanzamiento de Campaña</Text>
+      <Text style={styles.subtitle}>Completa los datos para activar la pauta</Text>
 
-      <Text style={styles.label}>Creativo Publicitario / Banner</Text>
+      {/* Banner / Creativo */}
+      <Text style={styles.label}>🎨 Creativo Publicitario / Banner</Text>
       {bannerUri ? (
         <View style={styles.imageWrapper}>
           <Image source={{ uri: bannerUri }} style={styles.previewImage} />
@@ -123,43 +137,50 @@ export const CreateCampaignScreen: React.FC<{ navigation: any }> = ({ navigation
       ) : (
         <View style={styles.uploadRow}>
           <TouchableOpacity style={styles.uploadBtn} onPress={pickBannerImage}>
-            <Text style={styles.uploadText}>📁 Galería</Text>
+            <Text style={styles.uploadEmoji}>🖼️</Text>
+            <Text style={styles.uploadText}>Galería</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.uploadBtn, { backgroundColor: '#1E293B' }]} onPress={takeBannerPhoto}>
-            <Text style={styles.uploadText}>📸 Tomar Foto</Text>
+
+          <TouchableOpacity style={styles.uploadBtnSecondary} onPress={takeBannerPhoto}>
+            <Text style={styles.uploadEmoji}>📸</Text>
+            <Text style={styles.uploadTextSecondary}>Tomar Foto</Text>
           </TouchableOpacity>
         </View>
       )}
 
-      <Text style={styles.label}>Título de la Campaña *</Text>
+      {/* Título */}
+      <Text style={styles.label}>📌 Título de la Campaña *</Text>
       <TextInput
         style={styles.input}
         placeholder="Ej. Black Friday Retargeting 2024"
-        placeholderTextColor="#64748B"
+        placeholderTextColor={darkTheme.textMuted}
         value={title}
         onChangeText={setTitle}
       />
 
-      <Text style={styles.label}>Cliente / Cuenta Publicitaria *</Text>
+      {/* Cliente */}
+      <Text style={styles.label}>👤 Cliente / Cuenta Publicitaria *</Text>
       <TextInput
         style={styles.input}
         placeholder="Ej. Nova Ecommerce SAS"
-        placeholderTextColor="#64748B"
+        placeholderTextColor={darkTheme.textMuted}
         value={clientName}
         onChangeText={setClientName}
       />
 
-      <Text style={styles.label}>Presupuesto Asignado (USD) *</Text>
+      {/* Presupuesto */}
+      <Text style={styles.label}>💰 Presupuesto Asignado (USD) *</Text>
       <TextInput
         style={styles.input}
         placeholder="Ej. 5000"
-        placeholderTextColor="#64748B"
+        placeholderTextColor={darkTheme.textMuted}
         keyboardType="numeric"
         value={budget}
         onChangeText={setBudget}
       />
 
-      <Text style={styles.label}>Objetivo Publicitario</Text>
+      {/* Objetivos */}
+      <Text style={styles.label}>🎯 Objetivo Publicitario</Text>
       <View style={styles.pillsContainer}>
         {objectives.map((obj) => {
           const selected = objective === obj;
@@ -169,12 +190,15 @@ export const CreateCampaignScreen: React.FC<{ navigation: any }> = ({ navigation
               onPress={() => setObjective(obj)}
               style={[styles.pill, selected && styles.pillSelected]}
             >
-              <Text style={[styles.pillText, selected && styles.pillTextSelected]}>{obj}</Text>
+              <Text style={[styles.pillText, selected && styles.pillTextSelected]}>
+                {obj}
+              </Text>
             </TouchableOpacity>
           );
         })}
       </View>
 
+      {/* Botón principal */}
       <TouchableOpacity style={styles.submitBtn} onPress={handleSave} disabled={loading}>
         {loading ? (
           <ActivityIndicator color="#FFF" />
@@ -190,67 +214,92 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: darkTheme.background,
-    padding: 16,
+    padding: 20,
   },
   sectionHeader: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '800',
     color: darkTheme.textPrimary,
-    marginBottom: 20,
-    marginTop: 4,
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: darkTheme.textSecondary,
+    marginBottom: 24,
   },
   label: {
     color: darkTheme.textSecondary,
     fontSize: 12,
     fontWeight: '700',
-    marginBottom: 6,
+    marginBottom: 8,
     textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   input: {
     backgroundColor: darkTheme.surface,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: darkTheme.surfaceBorder,
-    borderRadius: 12,
+    borderRadius: 14,
     padding: 14,
-    color: '#FFF',
+    color: darkTheme.textPrimary,
     fontSize: 15,
-    marginBottom: 16,
+    marginBottom: 18,
   },
   uploadRow: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 16,
+    marginBottom: 20,
   },
   uploadBtn: {
     flex: 1,
-    padding: 16,
-    backgroundColor: darkTheme.surfaceElevated,
-    borderRadius: 12,
+    paddingVertical: 18,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 14,
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderStyle: 'dashed',
     borderColor: darkTheme.primary,
   },
+  uploadBtnSecondary: {
+    flex: 1,
+    paddingVertical: 18,
+    backgroundColor: '#E0E7FF',
+    borderRadius: 14,
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: darkTheme.primary,
+  },
+  uploadEmoji: {
+    fontSize: 22,
+    marginBottom: 4,
+  },
   uploadText: {
-    color: darkTheme.textPrimary,
-    fontWeight: '600',
+    color: darkTheme.primary,
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  uploadTextSecondary: {
+    color: darkTheme.primary,
+    fontWeight: '700',
+    fontSize: 14,
   },
   imageWrapper: {
     position: 'relative',
-    marginBottom: 16,
-    borderRadius: 12,
+    marginBottom: 20,
+    borderRadius: 14,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: darkTheme.surfaceBorder,
   },
   previewImage: {
     width: '100%',
     height: 180,
-    borderRadius: 12,
   },
   changeBannerBtn: {
     position: 'absolute',
-    top: 8,
-    right: 8,
-    backgroundColor: 'rgba(0,0,0,0.75)',
+    top: 10,
+    right: 10,
+    backgroundColor: 'rgba(15, 23, 42, 0.75)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
@@ -264,14 +313,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginBottom: 24,
+    marginBottom: 28,
   },
   pill: {
-    paddingVertical: 8,
+    paddingVertical: 10,
     paddingHorizontal: 14,
-    borderRadius: 20,
-    backgroundColor: darkTheme.surface,
-    borderWidth: 1,
+    borderRadius: 22,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1.5,
     borderColor: darkTheme.surfaceBorder,
   },
   pillSelected: {
@@ -284,17 +333,23 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   pillTextSelected: {
-    color: '#FFF',
+    color: '#FFFFFF',
   },
   submitBtn: {
     backgroundColor: darkTheme.primary,
     paddingVertical: 16,
-    borderRadius: 14,
+    borderRadius: 16,
     alignItems: 'center',
+    shadowColor: darkTheme.primary,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.35,
+    shadowRadius: 12,
+    elevation: 6,
   },
   submitBtnText: {
-    color: '#FFF',
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '800',
+    letterSpacing: 0.3,
   },
 });
