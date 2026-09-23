@@ -1,15 +1,22 @@
 export const darkTheme = {
-  background: '#0B0F19',
-  surface: '#111827',
-  surfaceElevated: '#1F2937',
-  surfaceBorder: '#374151',
-  primary: '#6366F1',
-  secondary: '#06B6D4',
-  accent: '#F43F5E',
-  success: '#10B981',
+  // Fondo suave con color (no blanco plano)
+  background: '#EEF2FF',
+  surface: '#FFFFFF',
+  surfaceElevated: '#F8FAFF',
+  surfaceBorder: '#C7D2FE',
+
+  // Colores principales
+  primary: '#4F46E5',         // Índigo (botones y títulos clave)
+  primaryGlow: 'rgba(79, 70, 229, 0.15)',
+  secondary: '#06B6D4',       // Cyan (acento que resalta)
+  accent: '#F43F5E',          // Coral para alertas / paused
+  success: '#10B981',         // Verde ROAS
   warning: '#F59E0B',
-  textPrimary: '#F9FAFB',
-  textSecondary: '#9CA3AF',
-  textMuted: '#6B7280',
-  cardBg: '#131C2E',
+
+  // Textos
+  textPrimary: '#1E1B4B',
+  textSecondary: '#4B5563',
+  textMuted: '#9CA3AF',
+
+  cardBg: '#FFFFFF',
 };
