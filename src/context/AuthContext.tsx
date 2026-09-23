@@ -22,19 +22,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    AsyncStorage.getItem(AUTH_KEY).then((data) => {
-      if (data) {
-        setUser(JSON.parse(data));
+    const initAuth = async () => {
+      try {
+        const data = await AsyncStorage.getItem(AUTH_KEY);
+        if (data) {
+          setUser(JSON.parse(data));
+        }
+      } catch (error) {
+        console.log('Sin sesión previa guardada');
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    };
+    initAuth();
   }, []);
 
   const login = async (email: string, pass: string): Promise<boolean> => {
     if (email.trim().toLowerCase() === 'admin@apex.com' && pass === '123456') {
       const userData: User = { email, name: 'Media Buyer Lead', role: 'Agency Admin' };
       setUser(userData);
-      await AsyncStorage.setItem(AUTH_KEY, JSON.stringify(userData));
+      try {
+        await AsyncStorage.setItem(AUTH_KEY, JSON.stringify(userData));
+      } catch (e) {}
       return true;
     }
     return false;
@@ -42,7 +51,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     setUser(null);
-    await AsyncStorage.removeItem(AUTH_KEY);
+    try {
+      await AsyncStorage.removeItem(AUTH_KEY);
+    } catch (e) {}
   };
 
   return (
