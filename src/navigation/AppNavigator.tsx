@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { DashboardScreen } from '../screens/DashboardScreen';
+import { TabNavigator } from './TabNavigator';
 import { CampaignDetailScreen } from '../screens/CampaignDetailScreen';
 import { CreateCampaignScreen } from '../screens/CreateCampaignScreen';
 import { darkTheme } from '../theme/colors';
@@ -13,25 +13,17 @@ export const AppNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerStyle: {
-            backgroundColor: darkTheme.surface,
-          },
+          headerStyle: { backgroundColor: darkTheme.surface },
           headerTintColor: darkTheme.primary,
-          headerTitleStyle: {
-            fontWeight: '800',
-            fontSize: 17,
-            color: darkTheme.textPrimary,
-          },
+          headerTitleStyle: { fontWeight: '800', fontSize: 17, color: darkTheme.textPrimary },
           headerShadowVisible: false,
-          contentStyle: {
-            backgroundColor: darkTheme.background,
-          },
+          contentStyle: { backgroundColor: darkTheme.background },
         }}
       >
         <Stack.Screen
-          name="Dashboard"
-          component={DashboardScreen}
-          options={{ title: 'Marketing Agency Hub' }}
+          name="MainTabs"
+          component={TabNavigator}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="CampaignDetail"
