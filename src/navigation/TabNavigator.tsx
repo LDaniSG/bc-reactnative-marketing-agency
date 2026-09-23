@@ -33,13 +33,8 @@ export const TabNavigator = () => {
         name="DashboardTab"
         component={DashboardScreen}
         options={{
-<<<<<<< HEAD
-          title: '⚡ Marketing Agency Hub',  // Título principal en la pestaña del navegador y header
-          tabBarLabel: 'Campañas',            // Texto de la pestaña inferior
-=======
           title: '⚡ Marketing Agency Hub',
           tabBarLabel: 'Campañas',
->>>>>>> week-08
           tabBarIcon: ({ focused }) => <Text style={{ fontSize: 18 }}>{focused ? '🚀' : '📊'}</Text>,
         }}
       />
