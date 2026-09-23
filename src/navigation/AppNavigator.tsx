@@ -1,11 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-<<<<<<< HEAD
-=======
 import { useAuth } from '../context/AuthContext';
 import { LoginScreen } from '../screens/LoginScreen';
->>>>>>> week-08
 import { TabNavigator } from './TabNavigator';
 import { CampaignDetailScreen } from '../screens/CampaignDetailScreen';
 import { CreateCampaignScreen } from '../screens/CreateCampaignScreen';
@@ -36,23 +33,6 @@ export const AppNavigator = () => {
           contentStyle: { backgroundColor: darkTheme.background },
         }}
       >
-<<<<<<< HEAD
-        <Stack.Screen
-          name="MainTabs"
-          component={TabNavigator}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="CampaignDetail"
-          component={CampaignDetailScreen}
-          options={{ title: 'Detalle de Campaña' }}
-        />
-        <Stack.Screen
-          name="CreateCampaign"
-          component={CreateCampaignScreen}
-          options={{ title: 'Nueva Campaña' }}
-        />
-=======
         {!user ? (
           <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         ) : (
@@ -62,7 +42,6 @@ export const AppNavigator = () => {
             <Stack.Screen name="CreateCampaign" component={CreateCampaignScreen} options={{ title: 'Nueva Campaña' }} />
           </>
         )}
->>>>>>> week-08
       </Stack.Navigator>
     </NavigationContainer>
   );
