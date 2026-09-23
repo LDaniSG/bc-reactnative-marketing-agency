@@ -1,0 +1,15 @@
+export const darkTheme = {
+  background: '#0B0F19',
+  surface: '#111827',
+  surfaceElevated: '#1F2937',
+  surfaceBorder: '#374151',
+  primary: '#6366F1',
+  secondary: '#06B6D4',
+  accent: '#F43F5E',
+  success: '#10B981',
+  warning: '#F59E0B',
+  textPrimary: '#F9FAFB',
+  textSecondary: '#9CA3AF',
+  textMuted: '#6B7280',
+  cardBg: '#131C2E',
+};
