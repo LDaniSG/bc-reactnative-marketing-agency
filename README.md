@@ -98,3 +98,7 @@ src/
 
 4. Ejecutar en celular físico:
    npx expo start --tunnel
+
+### ⚡ Scripts de Automatización Rápida
+- **Iniciar servidor:** `./start.sh`
+- **Detener servidor:** `./stop.sh`
