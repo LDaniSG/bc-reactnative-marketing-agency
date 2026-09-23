@@ -1,60 +1,173 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '../theme';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { useMarketing } from '../context/MarketingContext';
+import { ChannelBarChart } from '../components/metrics/ChannelBarChart';
+import { darkTheme } from '../theme/colors';
 
-const MARKETING_CHANNELS = [
-  { id: '1', name: 'Meta Ads', activeCampaigns: 4, share: '35%' },
-  { id: '2', name: 'Google Search', activeCampaigns: 3, share: '28%' },
-  { id: '3', name: 'LinkedIn Ads', activeCampaigns: 2, share: '22%' },
-  { id: '4', name: 'TikTok Ads', activeCampaigns: 2, share: '15%' },
-];
+export const ChannelsScreen = () => {
+  const { campaigns } = useMarketing();
+  const allChannels = campaigns.flatMap((c) => c.channels);
 
-export function ChannelsScreen(): React.JSX.Element {
+  const totalChannelSpend = allChannels.reduce((acc, ch) => acc + ch.spent, 0);
+  const avgPerformance = allChannels.length
+    ? Math.round(allChannels.reduce((acc, ch) => acc + ch.performanceScore, 0) / allChannels.length)
+    : 0;
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.eyebrow}>DISTRIBUCIÓN DE RESULTADOS</Text>
-          <Text style={TYPOGRAPHY.title}>Canales de marketing</Text>
-          <Text style={styles.headerSubtitle}>Consulta cómo se distribuyen tus campañas.</Text>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Header */}
+      <Text style={styles.title}>📡 Canales de Pauta</Text>
+      <Text style={styles.subtitle}>
+        Distribución de presupuesto y rendimiento por plataforma publicitaria
+      </Text>
+
+      {/* Resumen KPIs */}
+      <View style={styles.kpiRow}>
+        <View style={styles.kpiCard}>
+          <Text style={styles.kpiEmoji}>🥇</Text>
+          <Text style={styles.kpiLabel}>Canal Líder</Text>
+          <Text style={styles.kpiVal}>Meta Ads</Text>
+          <Text style={styles.kpiSub}>Mayor volumen de conversiones</Text>
         </View>
 
-        {MARKETING_CHANNELS.map((channel) => (
-          <View key={channel.id} style={styles.channelCard}>
-            <View style={styles.channelIcon}><Ionicons name="analytics-outline" size={20} color={COLORS.accent} /></View>
-            <View style={styles.channelInfo}>
-              <Text style={styles.channelName}>{channel.name}</Text>
-              <Text style={styles.channelSubtitle}>{channel.activeCampaigns} campañas activas</Text>
-              <View style={styles.progressTrack}><View style={[styles.progressFill, { width: channel.share as `${number}%` }]} /></View>
-            </View>
-            <View style={styles.shareBlock}>
-              <Text style={styles.shareText}>{channel.share}</Text>
-              <Text style={styles.shareLabel}>PARTICIPACIÓN</Text>
-            </View>
-          </View>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+        <View style={[styles.kpiCard, styles.kpiCardAccent]}>
+          <Text style={styles.kpiEmoji}>⭐</Text>
+          <Text style={styles.kpiLabel}>Health Score</Text>
+          <Text style={[styles.kpiVal, { color: darkTheme.success }]}>{avgPerformance}/100</Text>
+          <Text style={styles.kpiSub}>Promedio ponderado</Text>
+        </View>
+      </View>
+
+      {/* Gráfico principal */}
+      <Text style={styles.sectionHeader}>📊 Participación de Presupuesto</Text>
+      {allChannels.length > 0 ? (
+        <ChannelBarChart channels={allChannels} />
+      ) : (
+        <Text style={styles.empty}>No hay datos de canales disponibles</Text>
+      )}
+
+      {/* Historial de optimizaciones (Línea de tiempo informativa) */}
+      <Text style={[styles.sectionHeader, { marginTop: 16 }]}>⚡ Optimizaciones Recientes de Pauta</Text>
+      <View style={styles.timelineBox}>
+        <View style={styles.timelineItem}>
+          <Text style={styles.timeTag}>Hoy, 10:30 AM</Text>
+          <Text style={styles.timeTitle}>🔹 Meta Ads - Incremento +15% Presupuesto</Text>
+          <Text style={styles.timeDesc}>Escalado de campaña Cyber Monday por ROAS superior a 5.0x.</Text>
+        </View>
+
+        <View style={styles.timelineItem}>
+          <Text style={styles.timeTag}>Ayer, 4:15 PM</Text>
+          <Text style={styles.timeTitle}>🔹 Google Ads - Ajuste de Pujas B2B</Text>
+          <Text style={styles.timeDesc}>Optimización de palabras clave negativas en campaña SaaS.</Text>
+        </View>
+
+        <View style={[styles.timelineItem, { borderLeftWidth: 0 }]}>
+          <Text style={styles.timeTag}>18 Nov, 2:00 PM</Text>
+          <Text style={styles.timeTitle}>🔹 TikTok Ads - Apertura de Audiencias Gen Z</Text>
+          <Text style={styles.timeDesc}>Nuevos creativos en video para Fintech Pay App.</Text>
+        </View>
+      </View>
+    </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: COLORS.background },
-  container: { flex: 1 },
-  content: { padding: SPACING.lg, gap: SPACING.md, paddingTop: SPACING.xl },
-  header: { marginBottom: SPACING.lg },
-  eyebrow: { color: COLORS.accent, fontSize: 11, fontWeight: '900', letterSpacing: 1.2, marginBottom: SPACING.sm },
-  headerSubtitle: { ...TYPOGRAPHY.subtitle, marginTop: SPACING.xs, fontSize: 14 },
-  channelCard: { backgroundColor: COLORS.card, padding: SPACING.md, borderRadius: RADIUS.md, borderWidth: 1, borderColor: COLORS.border, flexDirection: 'row', alignItems: 'center', gap: SPACING.md, shadowColor: '#172b3a', shadowOpacity: 0.04, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 1 },
-  channelIcon: { width: 44, height: 44, borderRadius: 14, backgroundColor: COLORS.activeBadge, alignItems: 'center', justifyContent: 'center' },
-  channelInfo: { flex: 1 },
-  channelName: { fontSize: 16, fontWeight: '800', color: COLORS.textPrimary },
-  channelSubtitle: { fontSize: 12, color: COLORS.textMuted, marginTop: 3 },
-  progressTrack: { height: 5, backgroundColor: COLORS.inputBg, borderRadius: RADIUS.full, overflow: 'hidden', marginTop: SPACING.sm },
-  progressFill: { height: '100%', backgroundColor: COLORS.accent, borderRadius: RADIUS.full },
-  shareBlock: { alignItems: 'flex-end', minWidth: 42 },
-  shareText: { color: COLORS.primaryDark, fontWeight: '900', fontSize: 16 },
-  shareLabel: { color: COLORS.textMuted, fontWeight: '800', fontSize: 8, letterSpacing: 0.6, marginTop: 2 },
+  container: {
+    flex: 1,
+    backgroundColor: darkTheme.background,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: darkTheme.textPrimary,
+  },
+  subtitle: {
+    fontSize: 13,
+    color: darkTheme.textSecondary,
+    marginBottom: 16,
+    marginTop: 2,
+  },
+  kpiRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 20,
+  },
+  kpiCard: {
+    flex: 1,
+    backgroundColor: darkTheme.surface,
+    padding: 14,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: darkTheme.surfaceBorder,
+  },
+  kpiCardAccent: {
+    borderColor: '#A7F3D0',
+    backgroundColor: '#ECFDF5',
+  },
+  kpiEmoji: {
+    fontSize: 18,
+    marginBottom: 4,
+  },
+  kpiLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: darkTheme.textMuted,
+    textTransform: 'uppercase',
+  },
+  kpiVal: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: darkTheme.textPrimary,
+    marginTop: 2,
+  },
+  kpiSub: {
+    fontSize: 11,
+    color: darkTheme.textSecondary,
+    marginTop: 2,
+  },
+  sectionHeader: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: darkTheme.textPrimary,
+    marginBottom: 10,
+  },
+  empty: {
+    color: darkTheme.textMuted,
+    textAlign: 'center',
+    marginTop: 40,
+  },
+  timelineBox: {
+    backgroundColor: darkTheme.surface,
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1.5,
+    borderColor: darkTheme.surfaceBorder,
+  },
+  timelineItem: {
+    borderLeftWidth: 2,
+    borderLeftColor: darkTheme.primary,
+    paddingLeft: 12,
+    marginBottom: 16,
+  },
+  timeTag: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: darkTheme.primary,
+  },
+  timeTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: darkTheme.textPrimary,
+    marginTop: 2,
+  },
+  timeDesc: {
+    fontSize: 12,
+    color: darkTheme.textSecondary,
+    marginTop: 2,
+    lineHeight: 16,
+  },
 });
