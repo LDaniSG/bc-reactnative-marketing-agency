@@ -80,31 +80,25 @@ src/
 │   └── colors.ts              # Tokens de diseño (Soft Lavender Light Theme)
 └── types/
     └── marketing.types.ts     # Interfaces TypeScript de Client, Campaign, Metric y Channel
+🚀 Ejecución y Desarrollo Local
+Requisitos previos
+Node.js (v18 o superior)
+pnpm (Gestor de paquetes oficial)
+Expo Go (Opcional, en dispositivo móvil físico)
+Pasos de instalación
+Clonar el repositorio:
+git clone https://github.com/LDaniSG/bc-reactnative-marketing-agency.git
+cd bc-reactnative-marketing-agency
 
----
+Instalar dependencias:
+pnpm install
 
-## 🚀 Ejecución y Desarrollo Local
+Ejecutar la aplicación en la Web:
+npx expo start --web
 
-### Requisitos previos
-- **Node.js** (v18 o superior)
-- **pnpm** (Gestor de paquetes oficial)
-- **Expo Go** (Opcional, en dispositivo móvil físico)
-
-### Pasos de instalación
-
-1. **Clonar el repositorio:**
-   `git clone https://github.com/LDaniSG/bc-reactnative-marketing-agency.git`
-   `cd bc-reactnative-marketing-agency`
-
-2. **Instalar dependencias:**
-   `pnpm install`
-
-3. **Ejecutar la aplicación en la Web:**
-   `npx expo start --web`
-
-### ⚡ Scripts de Automatización Rápida
-- **Iniciar servidor:** `./start.sh`
-- **Detener servidor:** `./stop.sh`
+⚡ Scripts de Automatización Rápida
+Iniciar servidor: ./start.sh
+Detener servidor: ./stop.sh
 
 ---
 
